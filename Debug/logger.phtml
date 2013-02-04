@@ -1,0 +1,26 @@
+<style type="text/css">
+    tr.head { background-color: #C7C7C7; }
+    .info { background-color: #528CE0; }
+    .error { background-color: red; }
+    .warning { background-color: yellow; }
+    .notice { background-color: white; }
+</style>
+<hr>
+<h3>Debug output:</h3>
+<table class="table table-bordered">
+    <tr class="head">
+        <td>Type</td>
+        <td>Key</td>
+        <td>Value</td>
+        <td>BackTrace</td>
+    </tr>
+    <?php $logs = $this->getLogData(); ?>
+    <?php foreach ($logs as $log) { ?>
+    <tr class="<?php echo $log['type']; ?>">
+        <td><?php echo $log['type']; ?></td>
+        <td><?php echo $log['key']; ?></td>
+        <td><?php echo $log['value'] ?></td>
+        <td><?php echo $log['backtrace']; ?></td>
+    </tr>
+    <?php } ?>
+</table>
