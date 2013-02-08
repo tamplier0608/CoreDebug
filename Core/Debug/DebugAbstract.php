@@ -41,6 +41,7 @@ class Core_Debug_DebugAbstract extends Zend_Debug
     protected $_logEnv = array(
         'development',
         'testing',
+        'staging'
     );
 
     /**
@@ -127,11 +128,14 @@ class Core_Debug_DebugAbstract extends Zend_Debug
      */
     public function showLogs()
     {
-        if (in_array(APPLICATION_ENV, $this->_logEnv) && count($this->_logData)) {
+        if (in_array(APPLICATION_ENV, $this->_logEnv) 
+                && count($this->_logData)) {
+            
             /**
              *  include view of debugger
              */
             require_once 'logger.phtml';
         }
     }
+    
 }

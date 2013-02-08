@@ -1,9 +1,13 @@
 <style type="text/css">
+    pre.short { height: 15px; overflow: hidden;}
     tr.head { background-color: #C7C7C7; }
     .info { background-color: #528CE0; }
     .error { background-color: red; }
     .warning { background-color: yellow; }
     .notice { background-color: white; }
+    .value { height: 25px; /*cursor: pointer;*/ }
+    .open { height: auto; }
+    .open-btn { position: absolute; right: 5px; top: 5px; display: none; }
 </style>
 <hr>
 <h3>Debug output:</h3>
@@ -19,13 +23,40 @@
     <tr class="<?php echo $log['type']; ?>">
         <td><?php echo $log['type']; ?></td>
         <td><?php echo $log['key']; ?></td>
-        <td><?php echo $log['value'] ?></td>
+        <td>
+            <div class="line" style="position: relative">
+                <div class="value">
+                <?php echo $log['value'] ?>
+                </div>
+                <button class="open-btn">Show / Hide</button>
+            </div>
+        </td>
         <td><?php echo $log['backtrace']; ?></td>
     </tr>
     <?php } ?>
 </table>
 <script type="text/javascript">
     $(document).ready(function() {
-
+        
+        $('pre').addClass('short')
+        
+        $('.value').dblclick(function () {
+            $(this).toggleClass('open')
+            $('pre').toggleClass('short')
+        })
+        
+        $('.line').hover(
+            function () {
+                $('.open-btn').show()
+            },
+            function () {
+                $('.open-btn').hide()
+            }
+        )
+            
+        $('.open-btn').click(function() {
+            $(this).parent('.line').find('.value').toggleClass('open')
+            $(this).parent('.line').find('pre').toggleClass('short')
+        })
     })
 </script>
