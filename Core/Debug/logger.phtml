@@ -6,7 +6,7 @@
     .warning { background-color: yellow; }
     .notice { background-color: white; }
     .value { height: 25px; /*cursor: pointer;*/ }
-    .open { height: auto; }
+    .open { height: auto; cursor: pointer;}
     .open-btn { position: absolute; right: 5px; top: 5px; display: none; }
 </style>
 <hr>
@@ -40,9 +40,9 @@
         
         $('pre').addClass('short')
         
-        $('.value').dblclick(function () {
-            $(this).toggleClass('open')
-            $('pre').toggleClass('short')
+        $('.value.open').live('dblclick', function () {
+            $(this).removeClass('open')
+            $(this).find('pre').addClass('short')
         })
         
         $('.line').hover(
