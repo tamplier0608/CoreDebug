@@ -14,7 +14,7 @@
 <table class="table table-bordered">
     <tr class="head">
         <td>Type</td>
-        <td>Key</td>
+        <td>Message</td>
         <td>Value</td>
         <td>BackTrace</td>
     </tr>
@@ -47,10 +47,10 @@
         
         $('.line').hover(
             function () {
-                $('.open-btn').show()
+                $(this).children('.open-btn').show()
             },
             function () {
-                $('.open-btn').hide()
+                $(this).children('.open-btn').hide()
             }
         )
             

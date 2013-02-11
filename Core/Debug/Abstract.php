@@ -16,21 +16,21 @@
  *
  * @TODO integrate Zend_Logger
  */
-class Core_Debug_DebugAbstract extends Zend_Debug
+abstract class Core_Debug_Abstract extends Zend_Debug
 {
     const CD_INFORMATION = 'info';
     const CD_WARNING = 'warning';
     const CD_ERROR = 'error';
     const CD_NOTICE = 'notice';
-
+        
     /**
      * Instance of Core_Debug class
      *
      * @var Core_Debug
      * @access protected
      */
-    protected static $_instance = null;
-
+    protected static $_instance = null; 
+    
     /**
      * Array with events data
      *
@@ -55,20 +55,6 @@ class Core_Debug_DebugAbstract extends Zend_Debug
     }
 
     /**
-     * Get instance of Debugger
-     *
-     * @access public static
-     * @return Core_Debug
-     */
-    public static function getInstance()
-    {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new Core_Debug();
-        }
-        return self::$_instance;
-    }
-
-    /**
      * Register debug event
      *
      * @access public
@@ -77,12 +63,17 @@ class Core_Debug_DebugAbstract extends Zend_Debug
      * @param string $key
      * @return Core_Debug|null
      */
-    public function addEvent($type = Core_Debug::CD_NOTICE, $value, $key = '')
+    public function addEvent($value, $key = '', $type = Core_Debug::CD_INFORMATION, 
+            $file = null, $line = null) 
     {
         $backTrace = debug_backtrace();
 
-        $file = $backTrace[0]['file'];
-        $line = $backTrace[0]['line'];
+        if (is_null($file)) {
+            $file = $backTrace[0]['file'];
+        }
+        if (is_null($line)) {
+            $line = $backTrace[0]['line'];
+        }
 
         $value = self::dump($value, null, false);
 
@@ -92,7 +83,7 @@ class Core_Debug_DebugAbstract extends Zend_Debug
             'type' => $type,
             'backtrace' => "File: $file<br />Line: $line",
         );
-
+        
         return self::$_instance;
     }
 
@@ -137,5 +128,6 @@ class Core_Debug_DebugAbstract extends Zend_Debug
             require_once 'logger.phtml';
         }
     }
-    
+ 
 }
+
