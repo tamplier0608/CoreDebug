@@ -39,7 +39,7 @@ class Core_Debug extends Core_Debug_Abstract
         
     );
 
-    final public function initErrorHandler()
+    final public function init()
     {
         /* turn off all errors */
         error_reporting(0);
@@ -73,8 +73,11 @@ class Core_Debug extends Core_Debug_Abstract
                         self::CD_ERROR , $lastError['file'], $lastError['line']);
             }
         }
-        
-        Core_Debug::getInstance()->showLogs();
+        if (!in_array($lastError['type'], self::$_critErrors)) {
+            Core_Debug::getInstance()->showLogs();
+        } else {
+            // @TODO add action
+        }
         
         return true;
     } 
