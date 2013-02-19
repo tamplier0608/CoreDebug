@@ -18,6 +18,12 @@
 
 class Core_Debug extends Core_Debug_Abstract
 {
+    /**
+     * Critical errors
+     * 
+     * @var array
+     * @access private 
+     */
     private static $_critErrors = array(
         E_USER_ERROR,
         E_ERROR,
@@ -27,11 +33,23 @@ class Core_Debug extends Core_Debug_Abstract
         
     );
     
+    /**
+     * Warnings list
+     * 
+     * @var array
+     * @access private 
+     */
     private static $_warnings = array(
         E_CORE_WARNING,
         E_COMPILE_WARNING,
     );
     
+    /**
+     * Notices list
+     * 
+     * @var array
+     * @access private 
+     */
     private static $_notices = array(
         E_USER_NOTICE,
         E_NOTICE,
@@ -39,15 +57,54 @@ class Core_Debug extends Core_Debug_Abstract
         
     );
 
-    final public function init()
+    /**
+     * Default settings
+     * 
+     * @var array 
+     */
+    private $_defaultParams = array(
+        'error_reporting' => 0,
+        'error_handler_enable' => true
+    );
+    
+    /**
+     * Init settings debug
+     * 
+     * @param array $params  
+     * @access public static
+     */
+    final public function init($params = null)
     {
+        if (is_null($params)) {
+            $params = $this->_defaultParams;
+        } else {
+            $diffs = array_diff_key($this->_defaultParams, $params);
+
+            if (count($diffs)) {
+                foreach ($diffs as $key => $value) {
+                    $params[$key] = $value;
+                }
+            }
+        }
+        extract($params);
+
         /* turn off all errors */
-        error_reporting(0);
+        error_reporting($error_reporting);
         
-        /* set user error handler function */
-        register_shutdown_function(array('Core_Debug', 'errorHandler'));
+        if ($error_handler_enable) {
+         
+            /* set user error handler function */
+            register_shutdown_function(array('Core_Debug', 'errorHandler'));
+
+        }
     }
  
+    /**
+     * Error handler function
+     * 
+     * @return boolean 
+     * @access public static
+     */
     public static function errorHandler()
     {
         $lastError = error_get_last();
@@ -55,17 +112,17 @@ class Core_Debug extends Core_Debug_Abstract
         if (!is_null($lastError)) {
             if (in_array($lastError['type'], self::$_critErrors)) {
                 
-                Core_Debug::getInstance()->addEvent($lastError['message'], 'PHP - critical error', 
+                Core_Debug::getInstance()->addEvent($lastError['message'], 'PHP', 
                         self::CD_ERROR , $lastError['file'], $lastError['line']);
                 
             } else if (in_array($lastError['type'], self::$_warnings)) {
                 
-                Core_Debug::getInstance()->addEvent($lastError['message'], 'PHP - warning', 
+                Core_Debug::getInstance()->addEvent($lastError['message'], 'PHP', 
                         self::CD_WARNING , $lastError['file'], $lastError['line']);
                 
             } else if (in_array($lastError['type'], self::$_notices)) {
                 
-                Core_Debug::getInstance()->addEvent($lastError['message'], 'PHP - notice', 
+                Core_Debug::getInstance()->addEvent($lastError['message'], 'PHP', 
                         self::CD_NOTICE , $lastError['file'], $lastError['line']);
                 
             } else {

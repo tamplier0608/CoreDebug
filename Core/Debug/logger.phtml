@@ -11,7 +11,7 @@
 </style>
 <hr>
 <h3>Debug output:</h3>
-<table class="table table-bordered">
+<table id="debug" class="table table-bordered">
     <tr class="head">
         <td>Type</td>
         <td>Message</td>
@@ -38,7 +38,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         
-        $('pre').addClass('short')
+        $('#debug pre').addClass('short')
         
         $('.value.open').live('dblclick', function () {
             $(this).removeClass('open')

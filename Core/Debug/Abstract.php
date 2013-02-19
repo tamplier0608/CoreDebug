@@ -38,12 +38,23 @@ abstract class Core_Debug_Abstract extends Zend_Debug
      */
     protected $_logData;
 
+    /**
+     * List of project environments
+     * 
+     * @var array 
+     */
     protected $_logEnv = array(
         'development',
         'testing',
         'staging'
     );
 
+    /**
+     *  
+     * @var boolean 
+     */
+    protected $_show = null;
+    
     /**
      * Constructor
      *
@@ -52,6 +63,7 @@ abstract class Core_Debug_Abstract extends Zend_Debug
     protected function __construct()
     {
         $this->_logData = array();
+        $this->_show = true;
     }
 
     /**
@@ -119,8 +131,8 @@ abstract class Core_Debug_Abstract extends Zend_Debug
      */
     public function showLogs()
     {
-        if (in_array(APPLICATION_ENV, $this->_logEnv) 
-                && count($this->_logData)) {
+        if ((in_array(APPLICATION_ENV, $this->_logEnv) 
+                && count($this->_logData)) && $this->_show) {
             
             /**
              *  include view of debugger
@@ -129,5 +141,16 @@ abstract class Core_Debug_Abstract extends Zend_Debug
         }
     }
  
+    /**
+     * Disable view of output debug
+     * 
+     * @access public
+     * @return \Core_Debug_Abstract 
+     */
+    public function disableView() {
+        $this->_show = false;
+        
+        return $this;
+    }
 }
 
